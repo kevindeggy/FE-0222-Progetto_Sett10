@@ -61,6 +61,10 @@ export class TodoComponent implements OnInit {
     sottC();
     this.cerca = cerca1;
     addCompl();
+
+    if (this.cerca === 0) {
+      this.aggiorna()
+    }
   }
 
   add(todo: string) {

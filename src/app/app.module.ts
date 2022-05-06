@@ -1,14 +1,34 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { RouterModule, Route } from '@angular/router';
 
 import { AppComponent } from './app.component';
+import { TodoComponent } from './pages/todo.component';
+import { CompletatiComponent } from './pages/completati.component';
+import { NavbarComponent } from './components/navbar.component';
 
+const routers: Route[] = [
+  {
+    path: "",
+    component: TodoComponent
+  },
+  {
+    path: "completed",
+    component: CompletatiComponent
+  }
+]
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TodoComponent,
+    CompletatiComponent,
+    NavbarComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    RouterModule.forRoot(routers),
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

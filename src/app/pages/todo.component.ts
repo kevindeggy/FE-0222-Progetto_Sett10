@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { addTask, getTask, arrayTodo } from '../services/todos.service';
+import { addTask, getTask, arrayTodo, cerca1, cerca2, addC, sottC, addCompl } from '../services/todos.service';
 
 @Component({
   template: `
@@ -10,8 +10,8 @@ import { addTask, getTask, arrayTodo } from '../services/todos.service';
     <p class="text-center">To do:</p>
     <input class="form-control w-25 mx-auto" type="text" [(ngModel)]="daFare" />
    <button class="btn btn-primary mt-2" (click)="add(daFare)">Aggiungi Task</button>
-   <p class="mt-4" *ngIf="arTodo.length === 0">{{ricerca}}</p>
-    <ul id="list" *ngFor="let item of arTodo">
+   <p class="mt-4" *ngIf="cerca === 0">{{ricerca}}</p>
+    <ul class="list" *ngFor="let item of arTodo">
     <li *ngIf="item.completed === false" class="d-flex justify-content-between fs-5 w-25" > <span *ngIf="item.modifica === false">- {{item.title}}</span> <input *ngIf="item.modifica === true" class="form-control w-75" type="text" [(ngModel)]="item.title"> <span><svg *ngIf="item.modifica === false" (click)="modifica(item.id)" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
   <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
   <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
@@ -23,17 +23,17 @@ import { addTask, getTask, arrayTodo } from '../services/todos.service';
    </div>
   `,
   styles: [`
-  #list {
+  .list {
     margin: 0;
     padding: 0;
   }
-    #list li {
+    .list li {
       border-bottom: 1px solid black;
       padding: 5px 0;
       box-shadow: 0px 0px 0px 0px grey;
       margin: 15px auto 0;
     }
-    #list li:hover {
+    .list li:hover {
       box-shadow: 0px 2px 4px 4px grey;
     }
     .bi {
@@ -46,6 +46,8 @@ import { addTask, getTask, arrayTodo } from '../services/todos.service';
 export class TodoComponent implements OnInit {
   daFare: string = '';
   arTodo = arrayTodo;
+  cerca = cerca1;
+  cercaCompl = cerca2;
   ricerca = 'Sto cercando i tasks...'
 
   constructor() {
@@ -56,11 +58,16 @@ export class TodoComponent implements OnInit {
 
   fattoTask(num: number) {
     this.arTodo[num - 1].completed = true;
+    sottC();
+    this.cerca = cerca1;
+    addCompl();
   }
 
   add(todo: string) {
+    addC();
     addTask(todo);
     setTimeout(() => {
+      this.cerca = cerca1;
       this.daFare = '';
     }, 1800)
   }
@@ -74,8 +81,9 @@ export class TodoComponent implements OnInit {
   }
 
   aggiorna() {
+    this.cerca = cerca1;
     setTimeout(() => {
-      if (this.arTodo.length === 0) {
+      if (this.cerca === 0) {
         return this.ricerca = 'Nessun Tasks'
       } else {
         return this.ricerca = '';
